@@ -396,9 +396,114 @@ void ListaTratamiento::imprimirLista()
 
 void ListaTratamiento::prueba(){}
 
+void ListaTratamiento::graficar()
+{
+    encabezado();
+    cuerpo();
+    pie();
+
+    system("dot -Tsvg -O ListaTratamiento.dot");
+    system("xdg-open ListaTratamiento.dot.svg");
+}
+void ListaTratamiento::encabezado()
+{
+    std::ofstream archivo;
+    archivo.open("ListaTratamiento.dot",std::ios::out);//abriendo el archivo
+    if(archivo.fail()){ std::cout<<"No se pudo crear el archivo"; exit(1);}
+
+        archivo<<"digraph listaTratamiento"<<std::endl;
+        archivo<<"{\n"<<std::endl;
+        archivo<<"rankdir=LR"<<std::endl;
+        archivo<<"nodesep=0.05;"<<std::endl;
+        archivo<<"node [shape=box, color=black ,fontsize=25,fontname=\"Italic\","<<std::endl;
+        archivo<<"       fontcolor=black,fillcolor=turquoise4 ,style=filled]\n"<<std::endl;
+
+    archivo.close();//cerrar el archivo
+}
+void ListaTratamiento::cuerpo()
+{
+    std::ofstream archivo;
+    archivo.open("ListaTratamiento.dot",std::ios::app);//abrimos el archivo en modo anadir
+    if(archivo.fail()){ std::cout<<"No se pudo crear el archivo"; exit(1);}
+
+    if(primero!=NULL){
+
+        int i=0;
+
+
+         NodoTratamiento* actual = primero;
+        do
+        {
+           std::string id =actual->getDato().id;
+           std::string nombre =actual->getDato().nombre;
+           std::string costo =actual->getDato().costo;
+
+
+           if(actual==primero)
+           {
+                archivo<<"nd"<<i<<"[label=\"Primero\\nId:"<<id
+                        <<"\\nNombre:"<<nombre<<"\\nCosto:"<<costo
+                        <<"\"];"<<std::endl;
+
+                //si existe solo uno nodo que se apunte a si mismo
+                if(primero==ultimo)
+                {
+                    archivo<<"nd"<<i<<"->nd"<<i<<"[dir=both];"<<std::endl;
+                }else
+                {
+                    archivo<<"nd"<<i<<"->nd"<<(i+1)<<"[constraint=false, dir=both];"<<std::endl;
+                }
+
+           }else if(actual==ultimo)
+           {
+               //media vez primero no sea igual al ultimo
+               if(!(primero==ultimo))
+               {
+                   archivo<<"nd"<<i<<"[label=\"Ultimo\\nId:"<<id
+                           <<"\\nNombre:"<<nombre<<"\\nCosto:"<<costo
+                           <<"\"];"<<std::endl;
+
+                    archivo<<"nd"<<i<<"->nd0"<<"[dir=both];"<<std::endl;
+
+               }
+
+
+           }else
+           {
+               archivo<<"nd"<<i<<"[label=\"Id:"<<id
+                       <<"\\nNombre:"<<nombre<<"\\nCosto:"<<costo
+                       <<"\"];"<<std::endl;
+
+               archivo<<"nd"<<i<<"->nd"<<(i+1)<<"[dir=both];"<<std::endl;
+
+           }
+
+        actual = actual->getSig();
+        i++;
+
+        }while(actual!=primero);
+
+    }else
+    {
+        archivo<<"nd0[label=\"Lista\\nVacia\"]"<<std::endl;
+
+    }
+
+     archivo.close();//cerrar el archivo
+
+}
+void ListaTratamiento::pie()
+{
+    std::ofstream archivo;
+    archivo.open("ListaTratamiento.dot",std::ios::app);//abrimos el archivo en modo anadir
+    if(archivo.fail()){std::cout<<"No se pudo crear el archivo"; exit(1);}
+
+        archivo<<"}"<<std::endl;
+
+
+      archivo.close();//cerrar el archivo
+}
+
+
 //void ListaTratamiento::ordenar(NodoUser* nuevo){}
 //void ListaTratamiento::eliminar(std::string id){}
-//void ListaTratamiento::graficar(){}
-//void ListaTratamiento::encabezado(){}
-//void ListaTratamiento::cuerpo(){}
-//void ListaTratamiento::pie(){}
