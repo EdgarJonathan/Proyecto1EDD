@@ -25,7 +25,10 @@ class NodoUser
 
     public:
     NodoUser(Usuario usuario);
+
     Usuario getDato() { return usuario; }
+    void setDato(Usuario user){this->usuario=user;}
+
     void    setSig(NodoUser* sig) { this->sig = sig;}
     NodoUser *getSig() { return sig; }
 
@@ -103,10 +106,6 @@ class ListaTratamiento
 {
 
     public:
-
-
-
-
     NodoTratamiento *primero;
     NodoTratamiento *ultimo;
 
